@@ -1,0 +1,21 @@
+{
+  "name": "joro-wallet",
+  "version": "1.0.0",
+  "description": "Damn, the wallet has a hole in it...",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wallet",
+    "joro",
+    "jorowallet",
+    "mnemonics"
+  ],
+  "author": "Georgi Angelov",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^1.8.2"
+  }
+}
