@@ -1,7 +1,7 @@
 
 class Block{
     
-    constructor: function(index, transactions, difficulty, prevHash, minedBy, blockDataHash, nonce, timestamp, blockHash){
+    constructor(index, transactions, difficulty, prevHash, minedBy, blockDataHash, nonce, timestamp, blockHash){
         this.index = index;
         this.transactions = transactions;
         this.difficulty = difficulty;
@@ -12,9 +12,8 @@ class Block{
         this.timestamp = timestamp;
         this.blockHash = blockHash;
     }
-    
-    validate: function(){
-        
-    }
+
     
 }
+
+module.exports = Block;
