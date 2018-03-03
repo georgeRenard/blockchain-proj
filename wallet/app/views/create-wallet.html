@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <link type="text/css" href="create-wallet.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alike+Angular|Asul|Concert+One|Eczar|Fruktur|Kavoon|Neuton|Space+Mono|Tillana|Work+Sans" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+    </header>
+
+    <main>
+        <div class="header">
+            <img class="logo" src="joro-wallet.png" width=96 height=96>
+            <div>
+                <span>JoroWallet</span>
+            </div>
+            <span id="close-window" class="close">X</span>
+        </div>
+
+        <div class="main-content">
+            <form class="choice-form">
+
+                <div class="form-row">
+                    <input id="name" class="main-input" type="text" name="wallet-name" placeholder="Wallet Name">
+                </div>
+
+                <div class="form-row">
+                    <input id="password" class="main-input" type="password" name="wallet-password" placeholder="Password">
+                </div>
+
+                <div class="form-row">
+                    <button id="create-wallet" class="main-button">Create Wallet</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+    </footer>
+
+</body>
+<script>
+    let {
+        ipcRenderer
+    } = require('electron');
+    
+    let buttonCreateWallet = document.getElementById("create-wallet");
+    let buttonCloseWindow = document.getElementById("close-window");
+
+    buttonCreateWallet.addEventListener('click', function(e) {
+        e.preventDefault();
+        var elliptic = require('elliptic');
+        var curve = elliptic.ec("secp256k1");
+        
+        var Crypto = require('crypto-js');
+        
+        let input = document.getElementById('password');
+        let password = input.value;
+        var keyPair = curve.genKeyPair();
+
+        var pubKey = keyPair.getPublic().getX().toString(16) +
+            (keyPair.getPublic().getY().isOdd() ? "1" : "0");
+
+        sessionStorage['privKey'] = Crypto.AES.encrypt(keyPair.getPrivate().toString(16), password);
+        sessionStorage['pubKey'] = pubKey;
+        sessionStorage['address'] = Crypto.RIPEMD160(pubKey).toString(Crypto.enc.hex);
+        console.log(sessionStorage);
+
+        ipcRenderer.send("create-new-wallet");
+    })
+
+    buttonCloseWindow.addEventListener("click", function(e) {
+        e.preventDefault();
+        ipcRenderer.send('close');
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,130 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Space Mono', monospace;
+    font-family: 'Concert One', cursive;
+    font-family: 'Kavoon', cursive;
+    font-family: 'Fruktur', cursive;
+    font-family: 'Tillana', cursive;
+    font-family: 'Asul', sans-serif;
+    font-family: 'Alike Angular', serif;
+    font-family: 'Work Sans', sans-serif;
+    font-family: 'Neuton', serif;
+    font-family: 'Eczar', serif;
+    background-color: rgba(36,49,60,1);
+}
+body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.logo {
+    float: left;
+    vertical-align: middle;
+    padding: 16px;
+}
+
+.header{
+    color: white;
+    font-family: "Concert One";
+    font-size: 24px;
+    font-weight: bold;
+    width: 100%;
+    min-height: 128px;
+    display: block;
+}
+
+
+.close {
+    float: right;
+    margin: 16px;
+    margin-top: 8px;
+    font-weight: 100;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.close:hover {
+    opacity: 0.7;
+}
+
+.main-content{
+    font-family: "Space Mono";
+    height: 70%;
+    width: 100%;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.main-button{
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 10 58;
+    border-radius: 12px;
+    border: 2px solid rgba(26,177,136,0.9);
+    cursor: pointer;
+    margin-top: 24px;
+}
+
+.main-button:hover {
+    background-color: rgba(26,177,136,0.9);
+}
+
+.main-input{
+    background-color: transparent;
+    border: 0;
+    color: white;
+    border-bottom: 2px solid rgba(26,177,136,0.9);
+    outline: none;
+    padding: 16px;
+    min-width: 200px;
+    padding-bottom: 8px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.form-row {
+    padding: 8px;
+    text-align: center;
+    vertical-align: center;
+    margin-top:8px;
+}
+
+.choice-form{
+    width: 100%;
+    display: block;
+    height: auto;
+    position: absolute;
+    top: 32%;
+    bottom: auto;
+}
+
+.right-header{
+    width: 100%;
+    height: 13%;
+    margin-top: 0;
+    background-color: white;
+    color: rgba(26,177,136,0.9);
+    box-shadow: 0 3px 6px rgba(36,49,60,1), 0 3px 6px rgba(0,0,0,0.23);
+    font-size: 32px;
+}
+
+.app-name{
+    margin-top: 16px;
+    display:inline-block;
+}
+
+.close{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}

@@ -1,13 +1,13 @@
 class Transaction{
     
     constructor(from, to, amount, timestamp, senderPubKey, signature, hash, blockIndex, success){
-        this._from = from;
-        this._to = to;
+        this.from = from;
+        this.to = to;
         this._amount = amount;
-        this._timestamp = timestamp;
-        this._senderPubKey = senderPubKey;
-        this._signature = signature;
-        this._hash = hash;
+        this.timestamp = timestamp;
+        this.senderPubKey = senderPubKey;
+        this.signature = signature;
+        this.hash = hash;
         this._blockIndex = blockIndex;
         this._success = success;
     }

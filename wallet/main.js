@@ -1,10 +1,28 @@
-var {app, BrowserWindow} = require('electron')
-var path = require('path')
-var url = require('url')
+const {app, BrowserWindow} = require('electron'),
+    path = require('path'),
+    url = require('url'),
+    {ipcMain} = require('electron');
 
 var win;
 
-function createWindow(){
+ipcMain.on('close', () => {
+    console.log("What?");
+    app.quit();
+})
+
+ipcMain.on('create-new-wallet', () => {
+    createWalletView();
+});
+
+function createWalletView(){
+    win.loadURL(url.format({
+        pathname: path.join(__dirname, 'app/views/wallet-dashboard.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+}
+
+function mainView(){
     //Win w:800 h:800
     win = new BrowserWindow({width: 450, height: 550, frame: false, resizable: false});
     win.loadURL(url.format({
@@ -21,5 +39,5 @@ function createWindow(){
     });
     
 }
-app.on('ready', createWindow);
+app.on('ready', mainView);
 

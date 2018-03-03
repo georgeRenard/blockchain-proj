@@ -16,17 +16,17 @@
             <div>
                 <span>JoroWallet</span>
             </div>
-            <span class="close">X</span>
+            <span id="close-window" class="close">X</span>
         </div>
 
         <div class="main-content">
             <form class="choice-form">
                 <div class="form-row">
-                    <button class="main-button">Create Wallet</button>
+                    <button id="create-wallet" class="main-button">Create Wallet</button>
                 </div>
-                
+
                 <div class="form-row">
-                    <button class="main-button">Import Wallet</button>
+                    <button id="import-wallet" class="main-button">Import Wallet</button>
                 </div>
             </form>
         </div>
@@ -36,5 +36,25 @@
     </footer>
 
 </body>
+
+<script>
+    let {
+        ipcRenderer
+    } = require('electron');
+    let buttonCreateWallet = document.getElementById("create-wallet");
+    let buttonCloseWindow = document.getElementById("close-window");
+    console.log(buttonCloseWindow);
+    console.log(buttonCreateWallet);
+    buttonCreateWallet.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = "create-wallet.html";
+    })
+
+    buttonCloseWindow.addEventListener("click", function(e) {
+        e.preventDefault();
+        ipcRenderer.send('close');
+    })
+
+</script>
 
 </html>

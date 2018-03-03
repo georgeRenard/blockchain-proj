@@ -1,3 +1,4 @@
+const Crypto = require('crypto-js');
 
 class Block{
     
@@ -13,6 +14,14 @@ class Block{
         this.blockHash = blockHash;
     }
 
+    validate(minerJob){
+           
+        let transactionsHash = Crypto.SHA256(this.transactions.toString()).toString(Crypto.enc.hex);
+        let proof = Crypto.SHA256(minerJob + this.timestamp + this.nonce).toString(Crypto.enc.hex);
+        
+        return transactionsHash === this.blockDataHash && this.blockHash === proof;
+        
+    }
     
 }
 

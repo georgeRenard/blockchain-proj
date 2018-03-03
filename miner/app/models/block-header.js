@@ -2,12 +2,13 @@
 
 class BlockHeader{
     
-    constructor(index, transactionsHash, prevBlockHash, difficulty, expectedReward){
-        this.index = index;
+    constructor(blockIndex, transactionsHash, transactionsCount, prevBlockHash, difficulty, expectedReward){
+        this.blockIndex = blockIndex;
         this.prevBlockHash = prevBlockHash;
         this.difficulty = difficulty;
         this.expectedReward = expectedReward;
         this.transactionsHash = transactionsHash;
+        this.transactionsCount = transactionsCount;
     }
     
 }

@@ -3,7 +3,6 @@ const express = require('express'),
       Block = require('../models/block');
 
 
-blockRouter.get()
 
 
 module.exports = blockRouter;

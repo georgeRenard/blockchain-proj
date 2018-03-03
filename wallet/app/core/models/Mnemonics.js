@@ -1,3 +1,5 @@
+const Crypto = require('crypto-js');
+
 class Mnemonics {
     
     
