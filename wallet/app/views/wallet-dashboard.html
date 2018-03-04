@@ -12,7 +12,7 @@
 
     <main>
         <div class="header">
-            <img class="logo" src="joro-wallet.png" width=112 height=112>
+            <img class="logo" src="joro-wallet.png" width=128 height=128>
             <div class="right-header">
                 <div>
                     <span class="app-name">JoroWallet</span>
@@ -25,9 +25,28 @@
 
         <div class="main-content">
             <div class="navbar">
-                <ul>
-                    
+                <ul class="navbar-holder">
+                    <li class="navbar-item">
+                        <span>
+                            <img src="../../resources/my-wallet-ico.png" width=48 height=48>
+                        </span>
+                        MyWallet
+                    </li>
+                    <li class="navbar-item">
+                        <span style="filter: brightness(200%);">
+                           <img src="../../resources/transactions-ico.png" width=48 height=48>
+                        </span>
+                        Transact
+                    </li>
+                    <li class="navbar-item">
+                        <span style="filter: brightness(200%);">
+                            <img src="../../resources/logout-ico.png" width=48 height=48>
+                        </span>
+                        Change
+                    </li>
                 </ul>
+            </div>
+            <div class="content">
             </div>
         </div>
     </main>
@@ -45,7 +64,7 @@
     let buttonCloseWindow = document.getElementById("close-window");
 
     buttonCreateWallet.addEventListener('click', function(e) {
-        e.preventDefault();
+        e.preventDefault();        
         var elliptic = require('elliptic');
         var curve = elliptic.ec("secp256k1");
 
