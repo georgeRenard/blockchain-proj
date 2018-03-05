@@ -87,8 +87,10 @@ class Keystore{
      * 
      *  
      */
-    save(){
+    save(filename){
+        var serializableJSON = this.toJSON();
 
+        
     }
 
     /**
