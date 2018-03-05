@@ -34,13 +34,6 @@ const bip39 = (function (walletName, password) {
     /** 
      * Serializes your wallet in JSON format encrypted with AES
      */
-    var serializeMnemonics = function () {
-
-    }
-
-    var deserializeMnemonics = function () {
-
-    }
 
     var generateSeedKey = function () {
         var generateSeedKey = (function () {
@@ -73,8 +66,6 @@ const bip39 = (function (walletName, password) {
 
     return {
         generateSeedKey: generateSeedKey,
-        serialize: serializeMnemonics,
-        deserialize: deserializeMnemonics,
         mnemonics: getMnemonicsList
     };
 
