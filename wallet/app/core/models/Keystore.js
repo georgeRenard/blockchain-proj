@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+const WALLETS_SERIALIZATION_PATH = "../../../user-wallets/";
+
 /** 
  *
  * @author Georgi Angelov @Softuni
@@ -22,9 +24,9 @@ const fs = require('fs');
  * @param {*} version
  * 
  */
-class Keystore{
+class Keystore {
 
-    constructor(cipherType, cipherparams, ciphertext, kdf, kdfparams, mac, id, version){
+    constructor(cipherType, cipherparams, ciphertext, kdf, kdfparams, mac, id, version) {
         this._cipherType = cipherType;
         this._cipherparams = cipherparams;
         this._ciphertext = ciphertext;
@@ -67,40 +69,116 @@ class Keystore{
      * ---------------------------------------------------
      * 
      */
-    toJSON(){
+    toJSON() {
         return {
-            crypto: {
+            version: this._version,
+            id: this._id,
+            Crypto: {
                 cipher: this._cipherType,
                 cipherparams: this._cipherparams,
                 ciphertext: this._ciphertext,
                 kdf: this._kdf,
                 kdfparams: this._kdfparams,
                 mac: this._mac
-            },
-            id: this._id,
-            version: this._version
+            }
         };
     }
 
-    /** 
-     *
-     * 
-     *  
-     */
-    save(filename){
-        var serializableJSON = this.toJSON();
 
-        
+    /**
+     * Performs DFS directory traversal and adds every file to the
+     * passed in list
+     * @static The function is static because it is accessed through static function
+     * @param {*} dir - directory to traverse 
+     * @param {*} filelist - filelist to append to
+     */
+    static traverse(dir, filelist) {
+        var files = fs.readdirSync(dir);
+        filelist = filelist || [];
+        files.forEach(function (file) {
+            if (fs.statSync(dir + file).isDirectory()) {
+                filelist = traverse(dir + file + '/', filelist);
+            } else {
+                filelist.push(file);
+            }
+        });
+        return filelist;
     }
 
     /**
      * 
-     * @param {*} userid 
+     * @save function is writing the current instance of Keystore object
+     * to file so it can be later deserialized for native use or 
+     * even imported into other HD Wallets with some modifications (mby?)
+     * 
+     * @param {*} fileName - The name of the keystore file
      */
-    static load(userid){
+    save(fileName) {
 
+        if (fileName === undefined || fileName === '') {
+            throw new Error("File name should be supplied before serialization.");
+        }
 
+        var serializableJSON = this.toJSON();
+        var content = JSON.stringify(serializableJSON);
+
+        var extension = "." + fileName.split("--")[2];
+        var walletFileName = WALLETS_SERIALIZATION_PATH + fileName + extension;
+        fs.writeFile(walletFileName, content, {
+            flag: 'w'
+        }, function (err) {
+            if (err) {
+                throw new Error("Your new wallet couldn't be saved. Please, try again. \n" + err);
+            }
+            console.log("Your wallet was successfully created :)");
+        });
+    }
+
+    /**
+     * Used for loading a keystore file in memory
+     * @static This static method is used to read a keystore file from the 
+     * filesystem using the "fs" module and to return a new instance
+     * of Keystore, which later will be used by bip32 module for deserialization
+     * of a wallet.
+     * @param {*} userid - The userid of the serialized wallet. Indicates which file to load
+     */
+    static load(userid) {
+
+        //Populating the files list by sync-traversing the wallets directory
+        let files = [];
+        Keystore.traverse(WALLETS_SERIALIZATION_PATH, files);
+
+        let walletFile = '';
+        //looking for the correct wallet with the correct id in the name
+        files.forEach(x => {
+            if (x.includes(userid)) {
+                walletFile = x;
+                return;
+            }
+        });
+
+        if (walletFile === '') throw new Error('No such wallet was found.');
+        //Read the contents of the keystore file
+        var filePath = WALLETS_SERIALIZATION_PATH + walletFile;
+        var lineReader = require('readline').createInterface({
+            input: fs.createReadStream(filePath)
+        });
+        //Read line by line async
+        var json = [];
+        lineReader.on('line', function (line) {
+            json.push(line);
+        });
+        //Simulating sync functionality because i suck at node.js
+        const sleep = require('system-sleep');
+        sleep(100);
+        //Deserialization of the Keystore object
+        //parse the object
+        var KeystoreObject = JSON.parse(json.join('\n'));
+        return KeystoreObject;
 
     }
 
 }
+
+
+module.exports = Keystore;

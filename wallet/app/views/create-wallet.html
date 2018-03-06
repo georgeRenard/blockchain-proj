@@ -49,31 +49,24 @@
     let buttonCreateWallet = document.getElementById("create-wallet");
     let buttonCloseWindow = document.getElementById("close-window");
 
+    let username = document.getElementById('name').value;
+    let password = document.getElementById('password').value;
+
     buttonCreateWallet.addEventListener('click', function(e) {
         e.preventDefault();
-        var elliptic = require('elliptic');
-        var curve = elliptic.ec("secp256k1");
-        
-        var Crypto = require('crypto-js');
-        
-        let input = document.getElementById('password');
-        let password = input.value;
-        var keyPair = curve.genKeyPair();
-
-        var pubKey = keyPair.getPublic().getX().toString(16) +
-            (keyPair.getPublic().getY().isOdd() ? "1" : "0");
-
-        sessionStorage['privKey'] = Crypto.AES.encrypt(keyPair.getPrivate().toString(16), password);
-        sessionStorage['pubKey'] = pubKey;
-        sessionStorage['address'] = Crypto.RIPEMD160(pubKey).toString(Crypto.enc.hex);
-        console.log(sessionStorage);
-
-        ipcRenderer.send("create-new-wallet");
+        ipcRenderer.send("create-new-wallet", {
+            username: username,
+            password: password
+        });
     })
 
     buttonCloseWindow.addEventListener("click", function(e) {
         e.preventDefault();
         ipcRenderer.send('close');
+    })
+
+    ipcRenderer.on('error', (err) => {
+        alert(err);
     })
 
 </script>

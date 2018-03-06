@@ -43,12 +43,17 @@
     } = require('electron');
     let buttonCreateWallet = document.getElementById("create-wallet");
     let buttonCloseWindow = document.getElementById("close-window");
-    console.log(buttonCloseWindow);
-    console.log(buttonCreateWallet);
+    let buttonImportWallet = document.getElementById('import-wallet');
+
     buttonCreateWallet.addEventListener('click', function(e) {
         e.preventDefault();
         window.location.href = "create-wallet.html";
     })
+
+    buttonImportWallet.addEventListener('click', function(e){
+        e.preventDefault();
+        window.location.href = "import-wallet.html";
+    });
 
     buttonCloseWindow.addEventListener("click", function(e) {
         e.preventDefault();

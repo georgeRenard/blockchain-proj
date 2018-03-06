@@ -4,8 +4,9 @@
   "description": "Damn, the wallet has a hole in it...",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app/core/models/main-cli.js",
+    "walletcli": "",
+    "test": "mocha ./app/core/models"
   },
   "keywords": [
     "wallet",
@@ -17,6 +18,8 @@
   "license": "MIT",
   "dependencies": {
     "base58": "^1.0.1",
+    "bignumber.js": "^6.0.0",
+    "bn.js": "^4.11.8",
     "bs58": "^4.0.1",
     "crypto-js": "^3.1.9-1",
     "electron": "^1.8.2",
@@ -24,6 +27,7 @@
     "npm": "^5.7.1",
     "number-theory": "^1.1.0",
     "scrypt": "^6.0.3",
+    "system-sleep": "^1.3.6",
     "unorm": "^1.4.1"
   },
   "devDependencies": {
