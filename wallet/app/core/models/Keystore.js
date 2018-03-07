@@ -130,7 +130,6 @@ class Keystore {
             if (err) {
                 throw new Error("Your new wallet couldn't be saved. Please, try again. \n" + err);
             }
-            console.log("Your wallet was successfully created :)");
         });
     }
 

@@ -1,8 +1,11 @@
 const express = require('express'),
-      blockRouter = express.Router(),
+      blocksRouter = express.Router(),
       Block = require('../models/block');
 
 
+blocksRouter.post('/notify', (req,res) => {
+
+});
 
 
-module.exports = blockRouter;
+module.exports = blocksRouter;

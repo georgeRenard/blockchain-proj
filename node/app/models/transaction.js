@@ -1,3 +1,18 @@
+/** 
+ * @author Georgi Angelov
+ * 
+ * Transaction class
+ * @constructor
+ * @param from
+ * @param to
+ * @param amount
+ * @param timestamp
+ * @param senderPubKey
+ * @param signature
+ * @param hash
+ * @param blockIndex
+ * @param success
+*/
 class Transaction{
     
     constructor(from, to, amount, timestamp, senderPubKey, signature, hash, blockIndex, success){

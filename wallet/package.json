@@ -4,7 +4,7 @@
   "description": "Damn, the wallet has a hole in it...",
   "main": "main.js",
   "scripts": {
-    "start": "node ./app/core/models/main-cli.js",
+    "start": "electron main.js",
     "walletcli": "",
     "test": "mocha ./app/core/models"
   },

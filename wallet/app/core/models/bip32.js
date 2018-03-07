@@ -182,9 +182,19 @@ const bip32 = function (walletName, password, mode) {
      * The serializeWallet function serializes the master key using 8 rounds of scrypt
      * to derive a symmetric key. Then it utilizes AES to encrypt the masterKey
      * @param {*} masterKey - Master key to encrypt
+     * @throws Error if master key is not instanceof ExtendedKey 
+     * or not a base58 encoded masterkey
      */
     var serializeWallet = function (masterKey) {
 
+        if(masterKey.length != 111 && !(masterKey instanceof ExtendedKey)){
+            throw new Error("Invalid master key is passed. "
+             + "It should be eihter instance of ExtendedKey or Base58 encoded key");
+        }
+
+        if(masterKey instanceof ExtendedKey){
+            masterKey = masterKey.toBase58();
+        }
 
         //Keystore protocol prereqs
         //The timestamp of creation
@@ -239,7 +249,7 @@ const bip32 = function (walletName, password, mode) {
                 DefaultCipherParams.iv = "0x00000000000000000000000000000000";
             }, function (err) {
                 error = err;
-            });
+            }).catch((err) => console.log(err));
         return error;
     }
 

@@ -142,7 +142,7 @@ class ExtendedKey {
         var shaPublicKeyBytes = Crypto.SHA256(this.pubKeyBytes()).toString(Crypto.enc.Hex);
         var ripeShaPublicKeyBytes = Crypto.RIPEMD160(this.pubKeyBytes()).toString(Crypto.enc.Hex);
         //Parent fingerprint for the child ~ ensures that this child was derived from this parent
-        var parentFP = ripeShaPublicKeyBytes.slice(0, 8);
+        var parentFP = '0x' + ripeShaPublicKeyBytes.slice(0, 8);
 
         return new ExtendedKey(this._version, childKey, lR, parentFP,
             this._depth + 1, index, childIsPrivate);
