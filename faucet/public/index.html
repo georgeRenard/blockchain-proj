@@ -1,74 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Joro's FAUCET</title>
+  <title>Joro's FAUCET</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <style>
+  <!-- Custom styles for this template -->
+  <style>
+    body {
+      padding-top: 54px;
+    }
+
+    @media (min-width: 992px) {
       body {
-        padding-top: 54px;
+        padding-top: 56px;
       }
-      @media (min-width: 992px) {
-        body {
-          padding-top: 56px;
-        }
-      }
+    }
+  </style>
 
-    </style>
+</head>
 
-  </head>
+<body>
 
-  <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Joro's Faucet. There is no excuse for not being rich!</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-    </nav>
-
-    <!-- Page Content -->
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <h1 class="mt-5">Welcome to Joro's Faucet. Here you can get rich as f*ck.</h1>
-          <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-          <ul class="list-unstyled">
-            <li>1.Enter your address below.</li>
-            <li>2.Wait for 'em bucks to flow.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="row text-center">
-        <form class="form-inline">
+      <a class="navbar-brand" href="#">Joro's Faucet. There is no excuse for not being rich!</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h1 class="mt-5">Welcome to Joro's Faucet. Here you can get rich as f*ck.</h1>
+        <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
+        <ul class="list-unstyled">
+          <li>1.Enter your address below.</li>
+          <li>2.Press the Send Button.</li>
+          <li>3.Wait for 'em bucks to flow.</li>
+          <br>
+        </ul>
+        <form style="margin-left: 39%;margin-right:auto;" class="form-inline lead" method="POST" action="/">
           <label class="sr-only" for="address">Address</label>
           <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-            <div class="input-group-addon">@</div>
-            <input type="text" class="form-control" id="address" placeholder="Address">
+            <input type="text" class="form-control" name="address" id="address" placeholder="Address">
           </div>
-       
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Send</button>
         </form>
       </div>
     </div>
+  </div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  </body>
+</body>
 
 </html>

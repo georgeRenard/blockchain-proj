@@ -179,7 +179,7 @@ var sendTransaction = function (from, to, amount, privk, pubk) {
     console.log(transaction);
     console.log("\n");
     reader.question("Do you sign and agree with the transaction ? (Y/N) \n ", (answer) => {
-        var hash = Crypto.SHA256(JSON.stringify(transaction)).toString;
+        var hash = Crypto.SHA256(JSON.stringify(transaction)).toString();
 
         if (answer === 'Y') {
 
