@@ -1,7 +1,7 @@
 const Node = require('./app/models/node');
 const Block = require('./app/models/block');
 
-const node = new Node(process.url, process.peers, 5);
+const node = new Node(process.url, process.peers, 4);
 
 var getGenesisBlock = () => {
     return new Block(
@@ -11,10 +11,6 @@ var getGenesisBlock = () => {
         2455432, "2018-02-01T23:23:56.337Z",
         '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7');
 };
-node.addBlock(getGenesisBlock());
+node.blockchain.add(getGenesisBlock());
 
-var init = () => {
-    return node;
-}
-
-module.exports = init
+module.exports = node

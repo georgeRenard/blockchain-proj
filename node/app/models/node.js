@@ -12,14 +12,15 @@ class Node {
         this.blockchain = new Blockchain();
         this.miningJobs = {};
         this.pendingTransactions = [];
+        this.confirmedTransactions = [];
     }
 
-    addTransaction(transaction) {
+    addPendingTransaction(transaction) {
         this.pendingTransactions.push(transaction);
     }
 
-    addBlock(block) {
-        this.blockchain.add(block);
+    confirmTransaction(transaction){
+        this.confirmedTransactions.push(transaction);
     }
 
     addMiningJob(miner, miningJob) {
@@ -27,7 +28,7 @@ class Node {
     }
 
     addPeer(peer) {
-
+        
     }
 
     transferBalance(from, to, amount) {
@@ -38,33 +39,39 @@ class Node {
         this.balances[to] += amount;
     }
 
-    getLastBlock() {}
-
-
     resolveConflict() {
-        let peers = this.peers;
-        var newChain = undefined;
-        var maxLen = this.blockchain.blocks.length;
+        return new Promise((resolve,reject) => {
+            let peers = this.peers;
+            var newChain = undefined;
+            var maxLen = this.blockchain.blocks.length;
 
-        for (let peer in peers) {
-            response = request.get(`${peer}/chain`, (err, res, body) => {
+            var awaitRequest = new Promise((res, rej) => {
+                for (let peer in peers) {
+                    response = request.get(`${peer}/chain`, (err, res, body) => {
 
-                if(res.statusCode === 200){
-                    var length = body.length;
-                }
-                chain = response.json()['chain']
+                        if(res.statusCode === 200){
+                            var length = body.length;
+                        }
+                        chain = response.json()['chain']
                 
-                if(length > maxLen && Blockchain.validateChain(chain)){
-                    maxLen = length;
-                    newChain = Blockchain.fromJSON(chain);
+                        if(length > maxLen && Blockchain.validateChain(chain)){
+                            maxLen = length;
+                            newChain = Blockchain.fromJSON(chain);
+                        }
+
+                        if(peer == peers[-1]){
+                            res();
+                        }
+                    });
                 }
             });
-        }
-        if (newChain) {
-            this.blockchain = newChain;
-        }
-
-        return True
+            awaitRequest.then(() => {
+                  if (newChain) {
+                     this.blockchain = newChain;
+                  }
+                  resolve();
+            });
+        });
     }
 
 }

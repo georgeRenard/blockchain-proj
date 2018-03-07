@@ -23,12 +23,13 @@ const HDPublicKeyID = '0x0488b21e';
 const HDPublicKeyHashAddressID = "0x00";
 
 /** 
- *
+ * 
  * @author Joro Angelov
  * @Softuni
  * ExtendedKey class is just a wrapper around an extended key
  * It holds all the data required by the protocol. Just a nefty
- * way to hold data.
+ * way to hold data. It supports different formats and derivations
+ * such as Base58/public and child key derivation
  * @constructor
  * @param version - version of the network
  * @param key - the actual key

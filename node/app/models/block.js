@@ -15,12 +15,10 @@ class Block {
     }
 
     validate(minerJob) {
-
-        let transactionsHash = Crypto.SHA256(JSON.stringify(this.transactions)).toString();
-        let proof = Crypto.SHA256(minerJob + this.timestamp + this.nonce).toString();
-
+        
+        let transactionsHash = Crypto.SHA256(this.transactions.toString()).toString();
+        let proof = Crypto.SHA256(JSON.stringify(minerJob) + this.timestamp + this.nonce).toString();
         return transactionsHash === this.blockDataHash && this.blockHash === proof;
-
     }
 
     static fromJSON(block) {

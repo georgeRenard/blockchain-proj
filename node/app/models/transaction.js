@@ -1,3 +1,6 @@
+const secp256k1 = new require('elliptic').ec('secp256k1');
+
+
 /** 
  * @author Georgi Angelov
  * 
@@ -18,14 +21,19 @@ class Transaction{
     constructor(from, to, amount, timestamp, senderPubKey, signature, hash, blockIndex, success){
         this.from = from;
         this.to = to;
-        this._amount = amount;
+        this.amount = amount;
         this.timestamp = timestamp;
         this.senderPubKey = senderPubKey;
         this.signature = signature;
         this.hash = hash;
-        this._blockIndex = blockIndex;
-        this._success = success;
+        this.blockIndex = blockIndex;
+        this.success = success;
     }
     
+    validateSignature(){
+
+        var key = secp256k1.fromPublicKey(this.senderPubKey);
+        return key.verify(this.hash, this.signature);
+    }
     
 }

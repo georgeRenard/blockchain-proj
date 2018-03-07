@@ -1,6 +1,6 @@
 const express = require('express'),
       homeController = express.Router(),
-      node = require('../../bc-entrypoint')();
+      node = require('../../bc-entrypoint');
       request = require('request');
 
 homeController.get('/info', (req,res) => {

@@ -1,0 +1,27 @@
+{
+  "name": "faucet",
+  "version": "1.0.0",
+  "description": "faucet",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgeRenard/blockchain-proj.git"
+  },
+  "keywords": [
+    "faucet",
+    "joro",
+    "blah",
+    "blah",
+    "moneeeeey",
+    "moneyyyyyy"
+  ],
+  "author": "Georgi Angelov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/georgeRenard/blockchain-proj/issues"
+  },
+  "homepage": "https://github.com/georgeRenard/blockchain-proj#readme"
+}

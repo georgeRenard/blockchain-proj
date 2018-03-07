@@ -75,7 +75,7 @@ do {
 
     var timestamp = new Date().toISOString();
     hashObj = Crypto.SHA256(blockJSON + timestamp + nonce);
-    blockHash = hashObj.toString(Crypto.enc.hex);
+    blockHash = hashObj.toString();
 
     console.log(`Block hash: ${blockHash}, nonce: ${nonce}`);
     
@@ -84,7 +84,6 @@ do {
     requestBlock(false, process.hrtime()[0] - timer);
     timer = process.hrtime()[0];
     if (blockHash.substring(0, difficulty) === target) {
-        
         //done
         request({
             method: "POST",
@@ -93,12 +92,12 @@ do {
             },
             url: url,
             body: JSON.stringify({
-                "nonce": nonce,
-                "blockHash": blockHash,
-                "difficulty": difficulty,
-                "timestamp": timestamp,
-                "transactionsCount": currentBlock.transactionsCount,
-                "transactionsHash": currentBlock.transactionsHash
+                nonce: nonce,
+                blockHash: blockHash,
+                difficulty: difficulty,
+                timestamp: timestamp,
+                transactionsCount: currentBlock.transactionsCount,
+                transactionsHash: currentBlock.transactionsHash
             })
         }, function (error, response, body) {
 

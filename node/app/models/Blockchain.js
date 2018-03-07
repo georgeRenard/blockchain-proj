@@ -8,6 +8,10 @@ class Blockchain{
         this.blocks.push(block);
     }
 
+    getLastBlock(){
+        return this.blocks.slice(-1)[0];
+    }
+
     static validateChain(chain){
         var lastBlock = chain[0]
 

@@ -12,6 +12,10 @@ const bip32 = require('./bip32');
 const ExtendedKey = require('./ExtendedKey');
 
 const DefaultDerivationPath = [46, 60, 0, 0];
+const Crypto = require('crypto-js');
+const secp256k1 = new require("elliptic").ec('secp256k1');
+const BN = require('bn.js');
+const request = require('request');
 
 var main = function () {
     reader.question("Create or Import (Write Create or Import) ?", (answer) => {
@@ -119,10 +123,88 @@ var initWallet = function (username, masterKey, dp) {
     process.stdout.write(`Derivation path: m/${dp[0]}/${dp[1]}/${dp[2]}/${dp[3]}/{account_id}\n`);
 
     process.stdout.write("============================================================\n");
-
     process.stdout.write("\n");
+
+    process.stdout.write('\n=======Commands you can use======');
+    process.stdout.write('\n1) w-send {from} {to} {amount}');
+    process.stdout.write('\n2) w-balance {address} (you can leave out address to check full balance)');
+    process.stdout.write('\n3) w-load-new');
+    mainLoop(username, privateKeys, addresses);
+
+}
+
+var mainLoop = function (username, privk, pubk) {
+
     reader.on('line', function (line) {
-        process.stdout.write(line);
+        var args = line.split(' ');
+        try {
+            switch (args[0]) {
+                case "w-send":
+                    sendTransaction(args[1], args[2], parseInt(args[3]));
+                    break;
+                case "w-balance":
+                    checkBalance(args.length > 1 ? args.slice(1) : [args[1]], privk, pubk);
+                    break;
+                case "w-load-new":
+                    importWallet();
+                    break;
+            }
+        } catch (err) {
+            process.stdout.write("Wrong command. Try again!");
+        }
+    });
+
+
+}
+
+var sendTransaction = function (from, to, amount, privk, pubk) {
+
+    var key = undefined;
+    for (var addr in pubK) {
+        if (addr === key) {
+            key = addr;
+        }
+    }
+
+    if (!key) {
+        process.stdout.write("Please, choose from the listed addresses.\n");
+    }
+
+    var transaction = {
+        from: from,
+        to: to,
+        amount: amount,
+        timestamp: new Date().toISOString(),
+    };
+    console.log(transaction);
+    console.log("\n");
+    reader.question("Do you sign and agree with the transaction ? (Y/N) \n ", (answer) => {
+        var hash = Crypto.SHA256(JSON.stringify(transaction)).toString;
+
+        if (answer === 'Y') {
+
+            var keyPair = secp256k1.genKeyPair();
+            var privKey = new BN(key._key.slice(1), 16, 'be');
+            keyPair.priv = privKey;
+
+            var signature = keyPair.sign(hash).toHex();
+
+            transaction.senderPubKey = keyPair.getPublic();
+            transaction.signature = signature;
+            transaction.transactionHash = hash;
+
+            request.post('localhost:3000/transactions/send', {body: transaction}, (err, res, body) => {
+
+                if(!err){
+                    console.log(body.message);
+                }else{
+                    console.log(err);
+                }
+
+            });
+        } else {
+            return;
+        }
     });
 
 }

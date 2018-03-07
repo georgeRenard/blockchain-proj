@@ -7,12 +7,11 @@ transactionsRouter.get('/pending', (req, res) => {
     res.json(node.pendingTransactions);
 });
 
-transactionsRouter.get('/confirmed', (req,res) => {
+transactionsRouter.get('/confirmed', (req, res) => {
 
 });
 
 transactionsRouter.get('/addresses/:id')
-
 /** 
  * @example
  *{
@@ -27,19 +26,30 @@ transactionsRouter.get('/addresses/:id')
  *  "minedInBlockIndex": 7
  *}   
  */
-transactionsRouter.post("/send",(req, res) => {
+transactionsRouter.post("/send", (req, res) => {
 
     var transactionJSON = req.body;
     let from = transactionJSON.from;
     let to = transactionJSON.to;
-    let value = transactionJSON.value;
+    let amount = transactionJSON.amount;
+    let timestamp = transactionJSON.timestamp;
     let senderPubKey = transactionJSON.senderPubKey;
-    let senderSignature = transactionJSON.senderSignature;
+    let senderSignature = transactionJSON.signature;
     let transactionHash = transactionJSON.transactionHash;
-    let paid = transactionJSON.paid;
+    let paid = false;
 
-    var tx = new Transaction()
+    var tx = new Transaction(from, to, amount, timestamp,
+        senderPubKey, senderSignature,
+        transactionHash, paid);
 
+    message = "The transaction was not accepted by the node on premise that it is invalid.";
+    if(tx.validateSignature()){
+        message = "Transaction was successfully submited. IT WILL BE PROCESED ASAP."
+        node.addPendingTransaction(tx);
+    }
+    res.json({
+        "message": message
+    });
 });
 
 module.exports = transactionsRouter;
