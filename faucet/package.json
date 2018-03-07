@@ -4,6 +4,7 @@
   "description": "faucet",
   "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "test": "test"
   },
   "repository": {
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/georgeRenard/blockchain-proj/issues"
   },
-  "homepage": "https://github.com/georgeRenard/blockchain-proj#readme"
+  "homepage": "https://github.com/georgeRenard/blockchain-proj#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
