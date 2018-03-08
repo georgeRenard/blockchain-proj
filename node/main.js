@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const pretty = require('express-prettify');
 
 var httpPort = process.env.HTTP_PORT || 3000;
 var p2pPort = process.env.P2P_PORT || 5000;
@@ -15,6 +16,7 @@ process.peers = peers;
 process.url = `http://localhost:${httpPort}`;
 
 app.use(bodyParser.json());
+app.use(pretty({ query: 'pretty' }));
 app.use(morgan('combined'));
 
 var miningController = require('./app/controllers/mining-controller');

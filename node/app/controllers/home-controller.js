@@ -1,9 +1,9 @@
 const express = require('express'),
-      homeController = express.Router(),
-      node = require('../../bc-entrypoint');
-      request = require('request');
+    homeController = express.Router(),
+    node = require('../../bc-entrypoint');
+request = require('request');
 
-homeController.get('/info', (req,res) => {
+homeController.get('/info', (req, res) => {
     res.json({
         about: "Blockchain Node /1.0 @Softuni",
         url: node.url,
@@ -14,34 +14,74 @@ homeController.get('/info', (req,res) => {
     });
 });
 
-homeController.get('/blocks', (req,res) => {
-    res.json(node.blockchain.blocks);
+homeController.get('/blocks', (req, res) => {
+
+    res.type('application/json');
+    res.json({
+        blocks: node.blockchain.blocks
+    });
 })
 
-homeController.get('/blocks/:id', (req,res) => {
-    res.json(node.blockchain.blocks[req.params.id]);
+homeController.get('/blocks/:id', (req, res) => {
+
+    res.type('application/json');
+    res.json({
+        block: node.blockchain.blocks[req.params.id]
+    });
 })
 
-homeController.get('/peers', (req,res) => {
-    res.json(node.peers);
+homeController.get('/peers', (req, res) => {
+
+    res.type('application/json');
+    res.json({
+        peers: node.peers
+    });
 });
 
-homeController.post('/peers', (req,res) => {
+homeController.post('/peers/notify', (req, res) => {
+    
+});
+
+homeController.get('/peers/resolve', (req, res) => {
+
+    var replaced = node.resolveConflict().then(() => {
+        res.type('application/json');
+        if (replaced)
+            res.json(JSON.stringify({
+                message: 'Our chain was replaced',
+                new_chain: JSON.stringify(node.blockchain)
+            }));
+        else {
+            res.json(JSON.stringify({
+                message: 'Our chain is authoritative',
+                chain: node.blockchain
+            }));
+        }
+    });
+})
+
+homeController.post('/peers', (req, res) => {
 
     var url = req.body.peerUrl;
-    if(url === undefined || typeof(url) !== 'string'){
+    if (url === undefined || typeof (url) !== 'string') {
         res.send("Invalid peer url. Please, try agian!");
     }
 
     node.addPeer(url);
 
-    if(req.body.isPeerRequest){
+    if (req.body.isPeerRequest) {
         return;
     }
-    request.post(url, {peerUrl: url, isPeerRequest: true}, (err, res, body) => {
-        if(!err) {
-            res.send({message: `Added peer: ${url}`});
-        }else{
+    request.post(url, {
+        peerUrl: url,
+        isPeerRequest: true
+    }, (err, res, body) => {
+        if (!err) {
+            request.get(`${url}/peers/resolve`);
+            res.send({
+                message: `Added peer: ${url}`
+            });
+        } else {
             res.send("Couldn't connect to peer.");
         }
     })

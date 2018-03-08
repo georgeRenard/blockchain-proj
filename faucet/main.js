@@ -1,29 +1,32 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
-
+const BN = require('bn.js');
+const app = express();
 const DefaultFaucetPort = 7000;
 const FaucetPrivKey = "3c55b7fb429881b2b5e6ecff42ef897606543ae5f5a83b63a976039c8910ccca";
+const FaucetAddress = "0x1b2f108f8297d330d822dde0cddd40e709233856";
 
 const Crypto = require('crypto-js');
 const secp256k1 = new require('elliptic').ec('secp256k1');
 const request = require('request');
 
-app.use(express.static('public'));
-app.use(bodyParser.json());
+var homeRouter = express.Router();
 
-app.get("/", (req, res) => {
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+homeRouter.get("/", (req, res) => {
     res.render('./public/index.html');
 })
 
-app.post("/", (req, res) => {
+homeRouter.post("/", bodyParser.json(), (req, res) => {
 
-    let address = res.body.address;
+    let address = req.body.address;
 
     var transaction = {
-        from: from,
-        to: to,
-        amount: amount,
+        from: FaucetAddress,
+        to: address,
+        amount: 5,
         timestamp: new Date().toISOString()
     };
 
@@ -32,23 +35,30 @@ app.post("/", (req, res) => {
     var privKey = new BN(FaucetPrivKey, 16, 'be');
     keyPair.priv = privKey;
 
-    var signature = keyPair.sign(hash).toHex();
+    var signature = keyPair.sign(hash);
 
     transaction.senderPubKey = keyPair.getPublic();
     transaction.signature = signature;
     transaction.transactionHash = hash;
-
-    request.post('localhost:3000/transactions/send', {body: transaction}, (err, res, body) => {
-
+    
+    request({
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        url: "http://localhost:3000/transactions/send",
+        body: JSON.stringify(transaction)
+    }, function (err, response, body) {
         if(!err){
-            res.json(body.message);
+            res.json(response);
         }else{
             res.send(err);
         }
 
     });
-
 });
+
+app.use('/', homeRouter);
 
 app.listen(DefaultFaucetPort, () => {
     console.log(`Listening on port: ${DefaultFaucetPort}`);

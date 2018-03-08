@@ -140,16 +140,17 @@ var mainLoop = function (username, privk, pubk) {
         try {
             switch (args[0]) {
                 case "w-send":
-                    sendTransaction(args[1], args[2], parseInt(args[3]));
+                    sendTransaction(args[1], args[2], parseInt(args[3]), privk, pubk);
                     break;
                 case "w-balance":
-                    checkBalance(args.length > 1 ? args.slice(1) : [args[1]], privk, pubk);
+                    checkBalance(args.length > 1 ? args.slice(1) : [args[1]]);
                     break;
                 case "w-load-new":
                     importWallet();
                     break;
             }
         } catch (err) {
+            console.log(err);
             process.stdout.write("Wrong command. Try again!");
         }
     });
@@ -158,16 +159,17 @@ var mainLoop = function (username, privk, pubk) {
 }
 
 var sendTransaction = function (from, to, amount, privk, pubk) {
-
     var key = undefined;
-    for (var addr in pubK) {
-        if (addr === key) {
-            key = addr;
+    for (var addr in pubk) {
+
+        if ("0x" + pubk[addr].hash === from) {
+            key = privk[addr];
         }
     }
 
     if (!key) {
         process.stdout.write("Please, choose from the listed addresses.\n");
+        return;
     }
 
     var transaction = {
@@ -176,6 +178,7 @@ var sendTransaction = function (from, to, amount, privk, pubk) {
         amount: amount,
         timestamp: new Date().toISOString(),
     };
+
     console.log(transaction);
     console.log("\n");
     reader.question("Do you sign and agree with the transaction ? (Y/N) \n ", (answer) => {
@@ -187,24 +190,48 @@ var sendTransaction = function (from, to, amount, privk, pubk) {
             var privKey = new BN(key._key.slice(1), 16, 'be');
             keyPair.priv = privKey;
 
-            var signature = keyPair.sign(hash).toHex();
+            var signature = keyPair.sign(hash);
 
             transaction.senderPubKey = keyPair.getPublic();
             transaction.signature = signature;
             transaction.transactionHash = hash;
 
-            request.post('localhost:3000/transactions/send', {body: transaction}, (err, res, body) => {
-
+            request({
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                url: "http://localhost:3000/transactions/send",
+                body: JSON.stringify(transaction)
+            }, function (err, response, body) {
                 if(!err){
                     console.log(body.message);
                 }else{
                     console.log(err);
                 }
-
+        
             });
         } else {
             return;
         }
     });
+
+}
+
+var checkBalance = function(accounts){
+
+    for(var account of accounts){
+        let url = `http://localhost:3000/transactions/addresses/${account}/balance`;
+        request({
+            method: "GET",
+            url: url
+        }, function (err, response, body) {
+            if(!err){
+                process.stdout.write('\n');
+                process.stdout.write(JSON.stringify(body));
+                process.stdout.write('\n');    
+            }   
+        });
+    }
 
 }

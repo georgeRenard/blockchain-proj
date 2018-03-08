@@ -4,14 +4,66 @@ const express = require('express'),
     node = require('../../bc-entrypoint');
 
 transactionsRouter.get('/pending', (req, res) => {
+    res.type('application/json');
     res.json(node.pendingTransactions);
 });
 
 transactionsRouter.get('/confirmed', (req, res) => {
-
+    res.type('application/json');
+    res.json(node.confirmedTransactions);
 });
 
-transactionsRouter.get('/addresses/:id')
+transactionsRouter.get('/addresses/:id', (req,res) =>{
+
+    var address = req.params.id;
+    var current = node.blockchain.blocks[0];
+    let txs = [];
+    let i = 1;
+    while(i < node.blockchain.blocks.length){
+
+        for(var tx in current.transactions){
+            if(tx.from === address || tx.to === address){
+                txs.push(tx);
+            }
+        }
+        current = node.blockchain.blocks[i];
+        i++;
+    }
+
+    res.type("application/json");
+    res.json({address: txs});
+});
+
+transactionsRouter.get("/addresses/:id/balance", (req,res) => {
+
+    var address = req.params.id;
+
+    if(!(address in node.balances)){
+        res.send("This address has no history!");
+        return;
+    }
+
+    var current = node.blockchain.blocks[0];
+    let i = 1;
+    let confirmations = [6,11,17,21];
+    let response = {};
+    let balance = node.balances[address];
+    while(i < node.blockchain.blocks.length){
+        for(var tx in current.transactions){
+            if(tx.from === address && tx.paid){
+                balance -= tx.amount;
+            }
+        }
+        current = node.blockchain.blocks[i];
+        i++;
+        if(i in confirmations){
+            response[`${i} confirmations`] = balance;
+        }
+    }
+
+    res.type('application/json');
+    res.json(JSON.stringify(response));
+});
 /** 
  * @example
  *{
@@ -27,7 +79,7 @@ transactionsRouter.get('/addresses/:id')
  *}   
  */
 transactionsRouter.post("/send", (req, res) => {
-
+    console.log(req.body);
     var transactionJSON = req.body;
     let from = transactionJSON.from;
     let to = transactionJSON.to;
@@ -43,10 +95,11 @@ transactionsRouter.post("/send", (req, res) => {
         transactionHash, paid);
 
     message = "The transaction was not accepted by the node on premise that it is invalid.";
-    if(tx.validateSignature()){
+    if(tx.validateSignature() && node.checkBalance(from, amount)){
         message = "Transaction was successfully submited. IT WILL BE PROCESED ASAP."
         node.addPendingTransaction(tx);
     }
+    res.type('application/json');
     res.json({
         "message": message
     });

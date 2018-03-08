@@ -28,7 +28,11 @@ class Node {
     }
 
     addPeer(peer) {
-        
+        this.peers.push(peer);
+    }
+
+    notifyPeers(block){
+
     }
 
     transferBalance(from, to, amount) {
@@ -39,28 +43,38 @@ class Node {
         this.balances[to] += amount;
     }
 
+    checkBalance(sender, amount){
+        if(this.balances[sender] < amount){
+            return false;
+        }
+
+        return true
+    }
+
     resolveConflict() {
         return new Promise((resolve,reject) => {
             let peers = this.peers;
             var newChain = undefined;
             var maxLen = this.blockchain.blocks.length;
 
-            var awaitRequest = new Promise((res, rej) => {
-                for (let peer in peers) {
-                    response = request.get(`${peer}/chain`, (err, res, body) => {
+            var awaitRequest = new Promise((resolve, reject) => {
+                for (let peer of peers) {
 
-                        if(res.statusCode === 200){
-                            var length = body.length;
+                    let url = `http://${peer}/blocks`;
+                    request.get(url, (err, res, body) => {
+                        let blocks = JSON.parse(body);
+                        if(!err){
+                            var length = blocks.length;
                         }
-                        chain = response.json()['chain']
+                        let chain = blocks.blocks;
                 
                         if(length > maxLen && Blockchain.validateChain(chain)){
                             maxLen = length;
                             newChain = Blockchain.fromJSON(chain);
                         }
 
-                        if(peer == peers[-1]){
-                            res();
+                        if(peer == peers.slice(-1)){
+                            resolve();
                         }
                     });
                 }

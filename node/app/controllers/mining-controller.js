@@ -1,6 +1,7 @@
 const express = require('express'),
     miningRouter = express.Router(),
     MiningJob = require('../models/mining-job'),
+    Transaction = require('../models/transaction'),
     node = require('../../bc-entrypoint'),
     Crypto = require('crypto-js'),
     Block = require('../models/block');
@@ -63,8 +64,17 @@ miningRouter.post('/get-block/:id', function (req, res) {
 
     //Validate
     if (block.index === node.blockchain.getLastBlock().index + 1 && block.validate(minerJob)) {
+        //Send coinbase to miner address
+        let reward = 5 + minerJob.expectedReward;
+        block.transactions.push(Transaction.newCoinbaseTo(minerId, reward));
         node.blockchain.add(block);
-        node.balances[minerId] += minerJob.expectedReward + 5;
+        node.pendingTransactions = node.pendingTransactions.slice(minerResponse.transactionsCount);
+        block.transactions.forEach(x => {
+            node.transferBalance(x.from, x.to, x.amount);
+            node.confirmedTransactions.push(x)
+            x.paid = true;
+        });
+        node.notifyPeers(block);
         delete node.miningJobs[minerId];
         res.send({
             "message": "Block mined successfully"
