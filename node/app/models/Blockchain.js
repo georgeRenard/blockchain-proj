@@ -1,3 +1,6 @@
+const Block = require('./block');
+const Crypto = require('crypto-js');
+
 class Blockchain{
 
     constructor(){
@@ -15,7 +18,7 @@ class Blockchain{
     static validateChain(chain){
         var lastBlock = chain[0]
 
-        i = 1
+        var i = 1
 
         while(i < chain.length){
             let block = chain[i]
@@ -23,7 +26,7 @@ class Blockchain{
             if(block.prevHash != Block.hash(lastBlock)){
                 return false;
             }
-            if(!Block.validateProof(last_block.proof, block.proof)){
+            if(!Block.validateProof(lastBlock, block)){
                 return false;
             }
             lastBlock = block;
@@ -36,7 +39,7 @@ class Blockchain{
 
         var newChain = new Blockchain();
         
-        for(let block in chain){
+        for(let block of chain){
             newChain.add(Block.fromJSON(block));
         }
 

@@ -56,8 +56,8 @@ miningRouter.post('/get-block/:id', function (req, res) {
     let nonce = minerResponse.nonce;
     let timestamp = minerResponse.timestamp;
     let blockHash = minerResponse.blockHash;
-    let prevHash = minerResponse.prevHash;
-
+    let prevHash = Crypto.SHA256(JSON.stringify(node.blockchain.getLastBlock())).toString();
+    
     let block = new Block(index,
         transactions, difficulty, prevHash, minerId,
         transactionsHash, nonce, timestamp, blockHash);

@@ -35,7 +35,7 @@ var nodeCallback = function (err, response, body) {
     let difficulty = block.difficulty;
     let prevBlockHash = block.prevBlockHash;
     let transactionsCount = block.transactionsCount;
-    
+
     if (JSON.stringify(currentBlock) !== '{}') {
         if (blockIndex == currentBlock.blockIndex) {
             if (transactionsHash !== currentBlock.transactionsHash) {
@@ -48,7 +48,7 @@ var nodeCallback = function (err, response, body) {
             }
         }
     }
-
+ 
     console.log(`Start mining block ${blockIndex}`);
     currentBlock = new BlockHeader(blockIndex, transactionsHash,transactionsCount, prevBlockHash, difficulty, expectedReward);
 
@@ -77,7 +77,7 @@ do {
     hashObj = Crypto.SHA256(blockJSON + timestamp + nonce);
     blockHash = hashObj.toString();
 
-    console.log(`Block hash: ${blockHash}, nonce: ${nonce}`);
+    //console.log(`Block hash: ${blockHash}, nonce: ${nonce}`);
     
     target = '0'.repeat(difficulty);
     

@@ -9,6 +9,7 @@ class BlockHeader{
         this.expectedReward = expectedReward;
         this.transactionsHash = transactionsHash;
         this.transactionsCount = transactionsCount;
+        console.log(this);
     }
     
 }

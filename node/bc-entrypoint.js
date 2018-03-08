@@ -2,7 +2,7 @@ const Node = require('./app/models/node');
 const Block = require('./app/models/block');
 const Transaction = require('./app/models/transaction');
 
-const node = new Node(process.url, process.peers, 4);
+const node = new Node(process.url, [], 4);
 
 
 var getGenesisBlock = () => {
@@ -19,5 +19,9 @@ var block = getGenesisBlock();
 node.blockchain.add(block);
 node.balances['0x1b2f108f8297d330d822dde0cddd40e709233856'] = 50000;
 node.balances['0x0000000000000000000000000000000000000000'] = 100000000000;
+
+for(let peer of process.peers){
+    node.addPeer(peer);
+}
 
 module.exports = node
